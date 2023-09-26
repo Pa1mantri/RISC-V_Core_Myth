@@ -101,6 +101,23 @@
          $is_bgeu = $dec_bits ==? 11'bx_111_1100011;
          $is_add = $dec_bits ==? 11'bx_000_0110011;
          $is_addi = $dec_bits ==? 11'bx_000_0010011;
+         
+         //Register file read
+         $rf_rd_en1 = $rs1_valid;
+         $rf_rd_en2 = $rs2_valid;
+         
+         $rf_rd_index1[4:0] = $rs1[4:0];
+         $rf_rd_index2[4:0] = $rs2[4:0];
+         
+         $src1_value = $rf_rd_data1;
+         $src2_value = $rf_rd_data2;
+         
+         $result[31:0] = $is_addi ? $src1_value + $imm :
+                         $is_add  ? $src1_value + $src2_value :
+                         32'bx;
+         
+         
+       
       // YOUR CODE HERE
       // ...
 
@@ -120,7 +137,7 @@
    //  o CPU visualization
    |cpu
       m4+imem(@1)    // Args: (read stage)
-      //m4+rf(@1, @1)  // Args: (read stage, write stage) - if equal, no register bypass is required
+      m4+rf(@1, @1)  // Args: (read stage, write stage) - if equal, no register bypass is required
       //m4+dmem(@4)    // Args: (read/write stage)
       //m4+myth_fpga(@0)  // Uncomment to run on fpga
 
