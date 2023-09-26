@@ -79,6 +79,28 @@
          $funct7_valid  =   $is_r_instr;
          $funct3_valid  =   $is_r_instr || $is_s_instr || $is_b_instr || $is_i_instr;
          $opcode[6:0] = $instr[6:0];
+         
+         
+         ?$rs2_valid
+            $rs2[4:0] = $instr[24:20];
+         ?$rs1_valid
+            $rs1[4:0] = $instr[19:15];
+         ?$rd_valid
+            $rd[4:0]  = $instr[11:7];
+         ?$funct7_valid
+            $funct7[6:0] = $instr[31:25];
+         ?$funct3_valid
+            $funct3[2:0] = $instr[14:12];
+            
+         $dec_bits[10:0] = ${$funct7[5],$funct3,$opcode};
+         $is_beq = $dec_bits ==? 11'bx_000_1100011;
+         $is_bne = $dec_bits ==? 11'bx_001_1100011;
+         $is_blt = $dec_bits ==? 11'bx_100_1100011;
+         $is_bge = $dec_bits ==? 11'bx_101_1100011;
+         $is_bltu = $dec_bits ==? 11'bx_110_1100011;
+         $is_bgeu = $dec_bits ==? 11'bx_111_1100011;
+         $is_add = $dec_bits ==? 11'bx_000_0110011;
+         $is_addi = $dec_bits ==? 11'bx_000_0010011;
       // YOUR CODE HERE
       // ...
 
@@ -105,4 +127,3 @@
    m4+cpu_viz(@4)    // For visualisation, argument should be at least equal to the last stage of CPU logic. @4 would work for all labs.
 \SV
    endmodule
-
